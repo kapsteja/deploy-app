@@ -1,33 +1,37 @@
-name: Terraform and Deploy to ECS
+name: Build and Deploy to ECS
 
 on:
   push:
     branches:
-    - main
+      - main
 
 jobs:
   deploy:
     name: Build, Push Docker image to ECR and Deploy to ECS
     runs-on: ubuntu-latest
 
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION}}  # Set your AWS region here
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID}}  # Set your AWS account ID here
+      ECS_CLUSTER_NAME: ${{ secrets.ECS_CLUSTER_NAME}}  # Set your ECS cluster name here
+      ECS_SERVICE_NAME: ${{ secrets.ECS_SERVICE_NAME}}  # Set your ECS service name here
+
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
 
-      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Build the application
-      - name: Build the application
-        run: npm run build
+      - name: Build Docker image
+        run: docker build -t sample-web-app .
 
       - name: Login to AWS ECR
         run: |
