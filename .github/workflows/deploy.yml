@@ -31,7 +31,7 @@ jobs:
         run: npm install
 
       - name: Build Docker image
-        run: docker build -t sample-web-app .
+        run: docker build -t my-sample-app .
 
       - name: Login to AWS ECR
         run: |
