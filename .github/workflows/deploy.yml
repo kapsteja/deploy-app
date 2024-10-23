@@ -31,17 +31,17 @@ jobs:
         run: npm install
 
       - name: Build Docker image
-        run: docker build -t my-sample-app .
+        run: docker build -t my-app .
 
       - name: Login to AWS ECR
         run: |
           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
       - name: Tag Docker image
-        run: docker tag my-sample-app:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-sample-app:latest
+        run: docker tag my-app:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-app:latest
 
       - name: Push Docker image to ECR
-        run: docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-sample-app:latest
+        run: docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/my-app:latest
 
       - name: Deploy to ECS
         run: |
