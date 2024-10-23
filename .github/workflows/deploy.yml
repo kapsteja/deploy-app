@@ -1,9 +1,9 @@
-name: Terraform and Deploy to ECS
+name: Build and Deploy to ECS
 
 on:
   push:
     branches:
-    - main
+      - main
 
 jobs:
   deploy:
@@ -11,23 +11,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
 
-      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Build the application
-      - name: Build the application
-        run: npm run build
+      - name: Build Docker image
+        run: docker build -t sample-web-app .
 
       - name: Login to AWS ECR
         run: |
